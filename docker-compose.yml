@@ -1,0 +1,11 @@
+services:
+  millennium-falcon:
+    build: ./backend
+    volumes:
+      - ./backend/millennium-falcon.json:/millennium-falcon.json
+      - ./backend/universe.db:/universe.db
+
+networks:
+  default:
+    external:
+      name: global-network

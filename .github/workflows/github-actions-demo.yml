@@ -1,19 +1,39 @@
 name: Deployment CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'github-actions' # For testing purpose
 
 jobs:
-  build:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: Package
-          path: staging
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: staging
+      - name: Copy the repository
+        uses: actions/checkout@v3
+      - name: Configure SSH communication
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/raspberry.key
+          chmod 600 ~/.ssh/raspberry.key
+          cat >>~/.ssh/config <<END
+          Host raspberry
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/raspberry.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+      - name: Upload configuration files
+        run: |
+          scp docker-compose.yml raspberry:~/dataiku
+          scp backend/Dockerfile raspberry:~/dataiku/backend
+      - name: Relaunch Docker containers
+        run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
+      - name: Clean up
+        if: always()
+        run: rm -rf ~/.ssh/
