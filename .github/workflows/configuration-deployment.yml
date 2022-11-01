@@ -2,8 +2,7 @@ name: Deployment CI
 
 on:
   push:
-    branches:
-      - 'github-actions' # For testing purpose
+    branches: [main]
 
 jobs:
   build-test-deploy:
