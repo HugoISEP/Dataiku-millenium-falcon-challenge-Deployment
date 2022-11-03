@@ -6,6 +6,8 @@ services:
       - ./backend/universe.db:/universe.db
   frontend-millennium-falcon:
     build: ./frontend
+    environment:
+      - API_URL=https://api.millennium-falcon.raspberry78.me
 
 
 networks:
