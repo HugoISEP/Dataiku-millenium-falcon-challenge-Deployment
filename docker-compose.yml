@@ -1,9 +1,12 @@
 services:
-  millennium-falcon:
+  backend-millennium-falcon:
     build: ./backend
     volumes:
       - ./backend/millennium-falcon.json:/millennium-falcon.json
       - ./backend/universe.db:/universe.db
+  frontend-millennium-falcon:
+    build: ./frontend
+
 
 networks:
   default:

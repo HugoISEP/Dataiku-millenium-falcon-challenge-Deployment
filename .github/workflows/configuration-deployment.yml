@@ -31,6 +31,7 @@ jobs:
         run: |
           scp docker-compose.yml raspberry:~/dataiku
           scp backend/Dockerfile raspberry:~/dataiku/backend
+          scp frontend/Dockerfile raspberry:~/dataiku/frontend
       - name: Relaunch Docker containers
         run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
       - name: Clean up
