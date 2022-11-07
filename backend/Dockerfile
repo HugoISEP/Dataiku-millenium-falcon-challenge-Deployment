@@ -6,4 +6,4 @@ COPY ${JAR_FILE} app.jar
 COPY millennium-falcon.json  millennium-falcon.json
 COPY universe.db  universe.db
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=prod", "/app.jar"]
