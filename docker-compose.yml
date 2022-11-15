@@ -1,11 +1,10 @@
 services:
   backend-millennium-falcon:
     build: ./backend
-    volumes:
-      - ./backend/millennium-falcon.json:/millennium-falcon.json
-      - ./backend/universe.db:/universe.db
+    restart: unless-stopped
   frontend-millennium-falcon:
     build: ./frontend
+    restart: unless-stopped
 
 
 networks:
